@@ -54,7 +54,7 @@ public abstract class DrawView extends SurfaceView
 	
 	// 刷新屏幕
 	public synchronized void refresh() {
-		notifyAll();
+		notify();
 	}
 	
 	@Override
@@ -75,7 +75,6 @@ public abstract class DrawView extends SurfaceView
 					(width, height, Bitmap.Config.RGB_565);
 			CANVAS.setBitmap(screenBitmap);
 			initAll();
-			refresh();
 		}
 	}
 	
