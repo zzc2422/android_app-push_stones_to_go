@@ -27,7 +27,7 @@ public abstract class DrawView extends SurfaceView
 	 * 用某一颜色清空屏幕
 	 * color：所用颜色，其数值可以用Color类获得。
 	 * */
-	public synchronized void clear(int color){
+	public synchronized void clearWithColor(int color){
 		CANVAS.drawColor(color);
 	}
 	
@@ -73,6 +73,7 @@ public abstract class DrawView extends SurfaceView
 			}
 			screenBitmap = Bitmap.createBitmap
 					(width, height, Bitmap.Config.RGB_565);
+			CANVAS.setBitmap(screenBitmap);
 			initAll();
 			refresh();
 		}
