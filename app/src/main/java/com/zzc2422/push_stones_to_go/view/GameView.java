@@ -16,12 +16,14 @@ public final class GameView extends NoTouchGameView {
 	// 对上下左右手势的处理
 	@Override
 	public void treatMove(boolean vertiOrHori, boolean plusOrMinus) {
-		
+		Behavior.INSTANCE.changeBehaviour(vertiOrHori, plusOrMinus);
+		showBehavior(Behavior.INSTANCE);
+		refresh();
 	}
 	
 	@Override
 	public void treatClick() throws GameOverException {
-		throw new GameOverException(0);
+		
 	}
 	
 	// 游戏开始时的初始化（必须实现）
