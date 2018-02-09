@@ -16,7 +16,7 @@ public final class GameView extends NoTouchGameView {
 	
 	// 游戏开始时的初始化（必须实现）
 	@Override
-	public void initAll() {
+	public void initGame() {
 		
 	}
 }

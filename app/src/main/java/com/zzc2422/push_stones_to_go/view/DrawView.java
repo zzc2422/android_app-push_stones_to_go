@@ -26,8 +26,8 @@ public abstract class DrawView extends SurfaceView
 	/**
 	 * 用某一颜色清空屏幕
 	 * color：所用颜色，其数值可以用Color类获得。
-	 * */
-	public synchronized void clearWithColor(int color){
+	 */
+	public synchronized void clearWithColor(int color) {
 		CANVAS.drawColor(color);
 	}
 	
@@ -47,7 +47,7 @@ public abstract class DrawView extends SurfaceView
 	 * text：文字内容
 	 * x、y：文字坐标（参照点取决于paint）
 	 * paint：使用的画笔
-	 * */
+	 */
 	public synchronized void drawText(String text, int x, int y, Paint paint) {
 		CANVAS.drawText(text, x, y, paint);
 	}
@@ -74,7 +74,7 @@ public abstract class DrawView extends SurfaceView
 			screenBitmap = Bitmap.createBitmap
 					(width, height, Bitmap.Config.RGB_565);
 			CANVAS.setBitmap(screenBitmap);
-			initAll();
+			initAll(width, height);
 		}
 	}
 	
@@ -101,5 +101,5 @@ public abstract class DrawView extends SurfaceView
 	}
 	
 	// 初始化
-	public abstract void initAll();
+	public abstract void initAll(int width, int height);
 }

@@ -40,4 +40,22 @@ public final class Behavior {
 	public int getDistanceAbs() {
 		return (distance >= 0 ? distance : -distance);
 	}
+	
+	@Override
+	public String toString() {
+		if (distance == 0) {
+			return "";
+		} else {
+			StringBuilder sb = new StringBuilder(20);
+			sb.append("向");
+			if (vertiOrHori == VERTICAL) {
+				sb.append((distance > 0 ? "下" : "上"));
+			} else {
+				sb.append((distance > 0 ? "右" : "左"));
+			}
+			sb.append("移动").append(distance > 0 ? distance : -distance)
+					.append("格");
+			return sb.toString();
+		}
+	}
 }
