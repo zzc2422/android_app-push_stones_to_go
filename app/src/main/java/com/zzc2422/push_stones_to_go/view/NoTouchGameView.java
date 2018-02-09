@@ -111,16 +111,16 @@ public abstract class NoTouchGameView extends DrawView {
 		wordAreaHeight = WORD_DOWN - WORD_UP;
 		if (wordAreaHeight < 46) {
 			wordHeight = (wordAreaHeight - 6) >> 1;
-		} else if (wordAreaHeight > 100) {
-			wordHeight = wordAreaHeight / 5;
+		} else if (wordAreaHeight > 160) {
+			wordHeight = wordAreaHeight >> 3;
 		} else {
 			wordHeight = 20;
 		}
 		wordGap = (wordAreaHeight - (wordHeight << 1)) / 3;
 		GAME_PAINT.setTextSize(wordHeight);
 		descent = GAME_PAINT.getFontMetricsInt().descent;
-		BEHAVIOR_BASE = WORD_MIDDLE - descent + (wordGap >> 1);
-		SCORE_BASE = WORD_DOWN - descent;
+		BEHAVIOR_BASE = WORD_MIDDLE - descent - (wordGap >> 1);
+		SCORE_BASE = WORD_DOWN - descent - wordGap;
 		OVER_PAINT.setTextSize(width >> 4);
 		OVER1 = height >> 2;
 		OVER2 = height >> 1;
@@ -130,22 +130,26 @@ public abstract class NoTouchGameView extends DrawView {
 	
 	// 处理触屏事件（通过调用treatGesture）
 	private void gameGesture(int gesture) {
-		try {
-			switch (gesture) {
-				case Behavior.UP:
-					treatGesture(Behavior.VERTICAL, Behavior.MINUS);
-					break;
-				case Behavior.DOWN:
-					treatGesture(Behavior.VERTICAL, Behavior.PLUS);
-					break;
-				case Behavior.LEFT:
-					treatGesture(Behavior.HORISONTAL, Behavior.MINUS);
-					break;
-				case Behavior.RIGHT:
-					treatGesture(Behavior.HORISONTAL, Behavior.PLUS);
-			}
-		} catch (GameOverException e) {
-			drawGameOver(e.SCORE);
+		switch (gesture) {
+			case Behavior.UP:
+				treatMove(Behavior.VERTICAL, Behavior.MINUS);
+				break;
+			case Behavior.DOWN:
+				treatMove(Behavior.VERTICAL, Behavior.PLUS);
+				break;
+			case Behavior.LEFT:
+				treatMove(Behavior.HORISONTAL, Behavior.MINUS);
+				break;
+			case Behavior.RIGHT:
+				treatMove(Behavior.HORISONTAL, Behavior.PLUS);
+				break;
+			case Behavior.NO_BEHAVIOR:
+				try {
+					treatClick();
+				} catch (GameOverException e) {
+					isInGame = false;
+					drawGameOver(e.SCORE);
+				}
 		}
 	}
 	
@@ -158,11 +162,14 @@ public abstract class NoTouchGameView extends DrawView {
 		drawText("你的得分是：" + score, OVER_X, OVER2, OVER_PAINT);
 		OVER_PAINT.setColor(Color.WHITE);
 		drawText("触摸屏幕再玩一局", OVER_X, OVER3, OVER_PAINT);
+		refresh();
 	}
 	
 	// 对上下左右手势的处理
-	public abstract void treatGesture(boolean vertiOrHori, boolean plusOrMinus)
-			throws GameOverException;
+	public abstract void treatMove(boolean vertiOrHori, boolean plusOrMinus);
+	
+	// 对点击手势的处理
+	public abstract void treatClick() throws GameOverException;
 	
 	// 游戏初始化
 	public abstract void initGame();

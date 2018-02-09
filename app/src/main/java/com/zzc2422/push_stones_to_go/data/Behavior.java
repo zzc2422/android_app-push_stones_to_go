@@ -14,7 +14,11 @@ public final class Behavior {
 	public final static Behavior INSTANCE = new Behavior();
 	
 	private Behavior() {
-		vertiOrHori = HORISONTAL;
+		vertiOrHori = false; // distance为0时此变量无效
+		init();
+	}
+	
+	public void init() {
 		distance = 0;
 	}
 	
