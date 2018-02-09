@@ -5,10 +5,9 @@ import android.view.MotionEvent;
 
 import com.zzc2422.push_stones_to_go.frame.DrawView;
 
-
-public final class GameView extends DrawView {
+public final class NoTouchGameView extends DrawView {
 	
-	public GameView(Context context) {
+	public NoTouchGameView(Context context) {
 		super(context);
 	}
 	

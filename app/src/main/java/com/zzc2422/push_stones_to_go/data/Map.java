@@ -6,10 +6,10 @@ public final class Map {
 	
 	public final static int ROW_AMOUNT = 7, COLUMN_AMOUNT = 7,
 			DEFAULT_CHARACTER_ROW = 2, DEFAULT_CHARACTER_COLUMN = 2;
-	public final static Map GAME_MAP = new Map();
+	public final static Map INSTANCE = new Map();
 	
 	private boolean hasPrize;
-	private int characterRow, characterColumn, prizeRow, prizeColumn;
+	private int characterRow, characterColumn, prizeRow, prizeColumn, score;
 	private final boolean[][] IS_GRID_STONE;
 	
 	private Map() {
@@ -27,6 +27,7 @@ public final class Map {
 		characterColumn = DEFAULT_CHARACTER_COLUMN;
 		makePrize();
 		hasPrize = true;
+		score = 0;
 	}
 	
 	public void setEmpty(int row, int column) {
@@ -76,5 +77,13 @@ public final class Map {
 			prizeColumn = Rand.get_rand_int(COLUMN_AMOUNT);
 		} while (isStone(prizeRow, prizeColumn) ||
 				(prizeRow == characterRow && prizeColumn == characterColumn));
+	}
+	
+	public int getScore() {
+		return score;
+	}
+	
+	public void scorePlus() {
+		score++;
 	}
 }
