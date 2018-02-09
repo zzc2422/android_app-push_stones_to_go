@@ -10,7 +10,7 @@ public final class TouchEvent {
 	private int downX, downY;
 	
 	private TouchEvent() {
-		
+		downX = downY = 0;
 	}
 	
 	public void down(int x, int y) {

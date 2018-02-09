@@ -1,4 +1,4 @@
-package com.zzc2422.push_stones_to_go.frame;
+package com.zzc2422.push_stones_to_go.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;

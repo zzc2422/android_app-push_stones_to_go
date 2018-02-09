@@ -1,9 +1,16 @@
 package com.zzc2422.push_stones_to_go.data;
 
+import android.graphics.Color;
+
 import com.zzc2422.push_stones_to_go.Rand;
 
 public final class Map {
 	
+	public final static int
+			EMPTY_GREEN = Color.GREEN,
+			STONE_WHITE = Color.WHITE,
+			PRIZE_YELLOW = Color.YELLOW,
+			CHARACTER_RED = Color.RED;
 	public final static int ROW_AMOUNT = 7, COLUMN_AMOUNT = 7,
 			DEFAULT_CHARACTER_ROW = 2, DEFAULT_CHARACTER_COLUMN = 2;
 	public final static Map INSTANCE = new Map();
