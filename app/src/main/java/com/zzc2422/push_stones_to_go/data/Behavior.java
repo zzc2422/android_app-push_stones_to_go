@@ -4,6 +4,8 @@ public final class Behavior {
 	
 	public final static boolean
 			HORISONTAL = false, VERTICAL = true, PLUS = true, MINUS = false;
+	public final static int
+			UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3, NO_BEHAVIOR = -1;
 	public final static int MAX_DISTANCE = Map.COLUMN_AMOUNT + Map.ROW_AMOUNT;
 	
 	private boolean vertiOrHori;
