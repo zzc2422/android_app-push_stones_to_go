@@ -48,10 +48,22 @@ public abstract class NoTouchGameView extends DrawView {
 	 * vertiOrHori：上下或左右
 	 * distance：距离（可正可负，为0则清除文字。）
 	 */
-	public void showBehavior(boolean vertiOrHori, int distance) {
+	public void showBehavior(Behavior behavior) {
 		GAME_PAINT.setColor(Color.BLACK);
 		drawRect(0, WORD_UP, SCREEN_WIDTH, WORD_MIDDLE, GAME_PAINT);
-		drawText(Behavior.INSTANCE.toString(), 0, BEHAVIOR_BASE, GAME_PAINT);
+		GAME_PAINT.setColor(Color.WHITE);
+		drawText(behavior.toString(), 0, BEHAVIOR_BASE, GAME_PAINT);
+	}
+	
+	/**
+	 * 刷新得分
+	 * score：得分
+	 */
+	public void showScore(int score) {
+		GAME_PAINT.setColor(Color.BLACK);
+		drawRect(0, WORD_MIDDLE, SCREEN_WIDTH, WORD_DOWN, GAME_PAINT);
+		GAME_PAINT.setColor(Color.CYAN);
+		drawText("score:" + score, 0, SCORE_BASE, GAME_PAINT);
 	}
 	
 	// 初始化所有
@@ -59,7 +71,6 @@ public abstract class NoTouchGameView extends DrawView {
 	public void initAll(int width, int height) {
 		initSize(width, height);
 		initGame();
-		refresh();
 	}
 	
 	// 处理触屏事件
@@ -91,17 +102,33 @@ public abstract class NoTouchGameView extends DrawView {
 	
 	// 初始化尺寸参数
 	private void initSize(int width, int height) {
+		int wordAreaHeight, wordHeight, descent, wordGap;
 		SCREEN_WIDTH = width;
 		GRID_WIDTH = width / Map.COLUMN_AMOUNT;
 		WORD_UP = GRID_WIDTH * Map.ROW_AMOUNT;
 		WORD_DOWN = height;
 		WORD_MIDDLE = (WORD_UP + WORD_DOWN) >> 1;
+		wordAreaHeight = WORD_DOWN - WORD_UP;
+		if (wordAreaHeight < 46) {
+			wordHeight = (wordAreaHeight - 6) >> 1;
+		} else if (wordAreaHeight > 100) {
+			wordHeight = wordAreaHeight / 5;
+		} else {
+			wordHeight = 20;
+		}
+		wordGap = (wordAreaHeight - (wordHeight << 1)) / 3;
+		GAME_PAINT.setTextSize(wordHeight);
+		descent = GAME_PAINT.getFontMetricsInt().descent;
+		BEHAVIOR_BASE = WORD_MIDDLE - descent + (wordGap >> 1);
+		SCORE_BASE = WORD_DOWN - descent;
 		OVER_PAINT.setTextSize(width >> 4);
 		OVER1 = height >> 2;
 		OVER2 = height >> 1;
 		OVER3 = height - OVER1;
+		OVER_X = width >> 1;
 	}
 	
+	// 处理触屏事件（通过调用treatGesture）
 	private void gameGesture(int gesture) {
 		try {
 			switch (gesture) {
@@ -122,6 +149,7 @@ public abstract class NoTouchGameView extends DrawView {
 		}
 	}
 	
+	// 绘制游戏结束界面
 	private void drawGameOver(int score) {
 		clearWithColor(Color.BLACK);
 		OVER_PAINT.setColor(Color.YELLOW);

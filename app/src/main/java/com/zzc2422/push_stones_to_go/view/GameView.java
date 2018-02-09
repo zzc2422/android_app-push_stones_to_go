@@ -1,6 +1,10 @@
 package com.zzc2422.push_stones_to_go.view;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
+
+import com.zzc2422.push_stones_to_go.data.Behavior;
 
 public final class GameView extends NoTouchGameView {
 	
@@ -17,6 +21,11 @@ public final class GameView extends NoTouchGameView {
 	// 游戏开始时的初始化（必须实现）
 	@Override
 	public void initGame() {
-		
+		Paint paint=new Paint();
+		paint.setColor(Color.YELLOW);
+		drawRect(0,0,240,240,paint);
+		showBehavior(Behavior.INSTANCE);
+		showScore(0);
+		refresh();
 	}
 }
