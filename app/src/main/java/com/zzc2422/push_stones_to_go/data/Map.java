@@ -10,29 +10,31 @@ public final class Map {
 	
 	private boolean hasPrize;
 	private int characterRow, characterColumn, prizeRow, prizeColumn;
-	private final Grid[][] GRID_SQUARE;
+	private final boolean[][] IS_GRID_STONE;
 	
 	private Map() {
-		GRID_SQUARE = new Grid[ROW_AMOUNT][COLUMN_AMOUNT];
+		IS_GRID_STONE = new boolean[ROW_AMOUNT][COLUMN_AMOUNT];
 		init();
 	}
 	
 	public void init() {
 		for (int row = 0; row < ROW_AMOUNT; row++) {
 			for (int column = 0; column < COLUMN_AMOUNT; column++) {
-				GRID_SQUARE[row][column] = new Grid();
+				IS_GRID_STONE[row][column] = false;
 			}
 		}
 		characterRow = DEFAULT_CHARACTER_ROW;
 		characterColumn = DEFAULT_CHARACTER_COLUMN;
+		makePrize();
+		hasPrize = true;
 	}
 	
 	public void setEmpty(int row, int column) {
-		GRID_SQUARE[row][column].setEmpty();
+		IS_GRID_STONE[row][column] = false;
 	}
 	
 	public void setStone(int row, int column) {
-		GRID_SQUARE[row][column].setStone();
+		IS_GRID_STONE[row][column] = true;
 	}
 	
 	public void setCharacterRow(int row) {
@@ -40,11 +42,15 @@ public final class Map {
 	}
 	
 	public void setCharacterColumn(int column) {
-		characterColumn=column;
+		characterColumn = column;
 	}
 	
 	public boolean isStone(int row, int column) {
-		return GRID_SQUARE[row][column].isStone();
+		return IS_GRID_STONE[row][column];
+	}
+	
+	public boolean hasPrize() {
+		return hasPrize;
 	}
 	
 	public int getPrizeRow() {
