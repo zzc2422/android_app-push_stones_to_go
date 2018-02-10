@@ -44,7 +44,8 @@ public final class GameView extends NoTouchGameView {
 			}
 			for (Position position : deleteSet) {
 				int row = position.ROW, column = position.COLUMN;
-				if (Map.INSTANCE.getPrizeRow() == row &&
+				if (Map.INSTANCE.hasPrize() &&
+						Map.INSTANCE.getPrizeRow() == row &&
 						Map.INSTANCE.getPrizeColumn() == column) {
 					Map.INSTANCE.deletePrize();
 				} else {
