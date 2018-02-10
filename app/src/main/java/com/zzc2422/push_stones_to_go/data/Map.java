@@ -12,7 +12,8 @@ public final class Map {
 			PRIZE_YELLOW = Color.YELLOW,
 			CHARACTER_RED = Color.RED;
 	public final static int ROW_AMOUNT = 7, COLUMN_AMOUNT = 7,
-			DEFAULT_CHARACTER_ROW = 3, DEFAULT_CHARACTER_COLUMN = 3;
+			DEFAULT_CHARACTER_ROW = 3, DEFAULT_CHARACTER_COLUMN = 3,
+			MIN_DELETE = 4;
 	public final static Map INSTANCE = new Map();
 	
 	private boolean hasPrize;
