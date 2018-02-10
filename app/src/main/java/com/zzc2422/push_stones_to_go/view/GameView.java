@@ -28,7 +28,37 @@ public final class GameView extends NoTouchGameView {
 	// 对点击手势的处理
 	@Override
 	public void treatClick() throws GameOverException {
-		
+		int distance = Behavior.INSTANCE.getDistance();
+		if (distance != 0) {
+			boolean vertiOrHori = Behavior.INSTANCE.getVertiOrHori();
+			Set<Position> deleteSet;
+			Behavior.INSTANCE.init();
+			showBehavior(Behavior.INSTANCE);
+			if (vertiOrHori == Behavior.VERTICAL) {
+				deleteSet = getColumnSetToDelete
+						(Map.INSTANCE.getCharacterColumn(),
+								verticalMove(distance));
+			} else {
+				deleteSet = getRowSetToDelete(Map.INSTANCE.getCharacterRow(),
+						horizontalMove(distance));
+			}
+			for (Position position : deleteSet) {
+				int row = position.ROW, column = position.COLUMN;
+				if (Map.INSTANCE.getPrizeRow() == row &&
+						Map.INSTANCE.getPrizeColumn() == column) {
+					Map.INSTANCE.deletePrize();
+				} else {
+					Map.INSTANCE.setEmpty(row, column);
+				}
+				drawGrid(row, column, Map.EMPTY_GREEN);
+			}
+			if (!Map.INSTANCE.hasPrize()) {
+				Map.INSTANCE.makePrize();
+				drawGrid(Map.INSTANCE.getPrizeRow(),
+						Map.INSTANCE.getPrizeColumn(), Map.PRIZE_YELLOW);
+			}
+			refresh();
+		}
 	}
 	
 	// 游戏开始时的初始化（必须实现）
@@ -48,6 +78,114 @@ public final class GameView extends NoTouchGameView {
 				Map.PRIZE_YELLOW);
 		showScore(0);
 		refresh();
+	}
+	
+	// 处理左右移动过程，返回移动的石头列集合。
+	private Set<Integer> horizontalMove(int distance) throws GameOverException {
+		int characterStep = (distance > 0 ? 1 : -1), stoneStep = -characterStep,
+				row = Map.INSTANCE.getCharacterRow(),
+				characterColumn = Map.INSTANCE.getCharacterColumn(),
+				stoneColumn = characterColumn;
+		Set<Integer> movedSet = new HashSet<>();
+		Map.INSTANCE.setStone(row, stoneColumn);
+		while (distance != 0) {
+			int characterNext = characterColumn + characterStep,
+					stoneNext = stoneColumn + stoneStep;
+			if (characterNext < 0 || characterNext >= Map.COLUMN_AMOUNT ||
+					Map.INSTANCE.isStone(row, characterNext) ||
+					characterNext == stoneNext) {
+				throw new GameOverException(Map.INSTANCE.getScore());
+			} else if (stoneNext < 0 || stoneNext >= Map.COLUMN_AMOUNT) {
+				stoneStep = -stoneStep;
+			} else if (Map.INSTANCE.isStone(row, stoneNext)) {
+				movedSet.add(stoneColumn);
+				stoneColumn = stoneNext;
+			} else {
+				drawGrid(row, characterColumn,
+						(Map.INSTANCE.isStone(row, characterColumn) ?
+								Map.STONE_WHITE : Map.EMPTY_GREEN));
+				characterColumn = characterNext;
+				drawGrid(row, characterNext, Map.CHARACTER_RED);
+				Map.INSTANCE.setEmpty(row, stoneColumn);
+				drawGrid(row, stoneColumn, Map.EMPTY_GREEN);
+				stoneColumn = stoneNext;
+				Map.INSTANCE.setStone(row, stoneNext);
+				drawGrid(row, stoneNext, Map.STONE_WHITE);
+				if (Map.INSTANCE.getPrizeRow() == row) {
+					if (Map.INSTANCE.getPrizeColumn() == characterColumn) {
+						Map.INSTANCE.scorePlus();
+						Map.INSTANCE.deletePrize();
+						showScore(Map.INSTANCE.getScore());
+					} else if (Map.INSTANCE.getPrizeColumn() == stoneColumn) {
+						Map.INSTANCE.deletePrize();
+					}
+				}
+				distance -= characterStep;
+				refresh();
+				try {
+					Thread.sleep(300);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		Map.INSTANCE.setCharacterColumn(characterColumn);
+		movedSet.add(stoneColumn);
+		return movedSet;
+	}
+	
+	// 处理上下移动过程，返回移动的石头行集合。
+	private Set<Integer> verticalMove(int distance) throws GameOverException {
+		int characterStep = (distance > 0 ? 1 : -1), stoneStep = -characterStep,
+				column = Map.INSTANCE.getCharacterColumn(),
+				characterRow = Map.INSTANCE.getCharacterRow(),
+				stoneRow = characterRow;
+		Set<Integer> movedSet = new HashSet<>();
+		Map.INSTANCE.setStone(stoneRow, column);
+		while (distance != 0) {
+			int characterNext = characterRow + characterStep,
+					stoneNext = stoneRow + stoneStep;
+			if (characterNext < 0 || characterNext >= Map.ROW_AMOUNT ||
+					Map.INSTANCE.isStone(characterNext, column) ||
+					characterNext == stoneNext) {
+				throw new GameOverException(Map.INSTANCE.getScore());
+			} else if (stoneNext < 0 || stoneNext >= Map.ROW_AMOUNT) {
+				stoneStep = -stoneStep;
+			} else if (Map.INSTANCE.isStone(stoneNext, column)) {
+				movedSet.add(stoneRow);
+				stoneRow = stoneNext;
+			} else {
+				drawGrid(characterRow, column,
+						(Map.INSTANCE.isStone(characterRow, column) ?
+								Map.STONE_WHITE : Map.EMPTY_GREEN));
+				characterRow = characterNext;
+				drawGrid(characterNext, column, Map.CHARACTER_RED);
+				Map.INSTANCE.setEmpty(stoneRow, column);
+				drawGrid(stoneRow, column, Map.EMPTY_GREEN);
+				stoneRow = stoneNext;
+				Map.INSTANCE.setStone(stoneNext, column);
+				drawGrid(stoneNext, column, Map.STONE_WHITE);
+				if (Map.INSTANCE.getPrizeColumn() == column) {
+					if (Map.INSTANCE.getPrizeRow() == characterRow) {
+						Map.INSTANCE.scorePlus();
+						Map.INSTANCE.deletePrize();
+						showScore(Map.INSTANCE.getScore());
+					} else if (Map.INSTANCE.getPrizeRow() == stoneRow) {
+						Map.INSTANCE.deletePrize();
+					}
+				}
+				distance -= characterStep;
+				refresh();
+				try {
+					Thread.sleep(300);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		Map.INSTANCE.setCharacterRow(characterRow);
+		movedSet.add(stoneRow);
+		return movedSet;
 	}
 	
 	/**

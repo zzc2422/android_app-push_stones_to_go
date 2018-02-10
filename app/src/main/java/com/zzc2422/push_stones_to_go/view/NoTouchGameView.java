@@ -37,7 +37,7 @@ public abstract class NoTouchGameView extends DrawView {
 	 * type：格子类型（为MAP中的颜色常量）
 	 */
 	public void drawGrid(int row, int column, int typeColor) {
-		int x1 = row * GRID_WIDTH, y1 = column * GRID_WIDTH;
+		int x1 = column * GRID_WIDTH, y1 = row * GRID_WIDTH;
 		GAME_PAINT.setColor(typeColor);
 		drawRect(x1, y1, x1 + GRID_WIDTH - 1, y1 + GRID_WIDTH - 1,
 				GAME_PAINT);

@@ -78,6 +78,10 @@ public final class Map {
 		return characterColumn;
 	}
 	
+	public void deletePrize() {
+		hasPrize = false;
+	}
+	
 	public void makePrize() {
 		hasPrize = true;
 		do {

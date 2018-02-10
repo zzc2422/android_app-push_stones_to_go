@@ -41,8 +41,8 @@ public final class Behavior {
 		return distance >= 0;
 	}
 	
-	public int getDistanceAbs() {
-		return (distance >= 0 ? distance : -distance);
+	public int getDistance() {
+		return distance;
 	}
 	
 	@Override
